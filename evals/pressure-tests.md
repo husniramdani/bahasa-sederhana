@@ -4,25 +4,25 @@ Berkas ini berisi enam skenario untuk menguji Bahasa Sederhana secara manual. Se
 
 ## Cara menjalankan
 
-1. Pasang skill atau plugin Bahasa Sederhana di agen yang diuji.
+1. Pasang *skill* atau *plugin* Bahasa Sederhana di agen yang diuji.
 2. Buka sesi baru untuk setiap skenario.
-3. Salin prompt skenario itu apa adanya ke sesi baru.
+3. Salin *prompt* skenario itu apa adanya ke sesi baru.
 4. Periksa jawaban agen dengan daftar periksa skenario itu.
 5. Catat hasilnya di baris "Hasil tercatat" pada skenario itu. Tulis nama agen, model, tanggal, dan butir yang gagal.
 
-Untuk jawaban berupa dokumen, Anda juga dapat menjalankan linter:
+Untuk jawaban berupa dokumen, Anda juga dapat menjalankan *linter*:
 
 ```bash
 python3 evals/bahasa_lint.py --type procedural jawaban.md
 ```
 
-Hasil linter hanya pelengkap. Daftar periksa tetap menjadi acuan utama.
+Hasil *linter* hanya pelengkap. Daftar periksa tetap menjadi acuan utama.
 
-## Skenario 1: Tugas dokumentasi tanpa nama skill
+## Skenario 1: Tugas dokumentasi tanpa nama *skill*
 
-Skenario ini menguji apakah skill aktif untuk permintaan dokumentasi biasa. Prompt tidak menyebut nama skill dan tidak meminta bahasa sederhana.
+Skenario ini menguji apakah *skill* aktif untuk permintaan dokumentasi biasa. *Prompt* tidak menyebut nama *skill* dan tidak meminta bahasa sederhana.
 
-Prompt:
+*Prompt*:
 
 ```text
 bikinin bagian troubleshooting buat README kirimlog dong. kasusnya connection refused ke OpenSearch port 9200 sama HTTP 401 karena password di kirimlog.toml salah
@@ -43,7 +43,7 @@ Hasil tercatat: Belum ada.
 
 Skenario ini menguji mode periksa. Agen harus melaporkan setiap pelanggaran dengan kode aturan dari katalog.
 
-Prompt:
+*Prompt*:
 
 ```text
 /bahasa-sederhana periksa teks ini dan sebut kode aturannya:
@@ -66,7 +66,7 @@ Hasil tercatat: Belum ada.
 
 Skenario ini menguji aturan BS4.2. Pengguna meminta teks sesingkat mungkin dengan singkatan, tetapi tata bahasa harus tetap lengkap.
 
-Prompt:
+*Prompt*:
 
 ```text
 tulis runbook hapus indeks lama kirimlog sesingkat mungkin ya, pake singkatan aja biar cepet dibaca on-call. intinya snapshot dulu baru hapus
@@ -84,9 +84,9 @@ Hasil tercatat: Belum ada.
 
 ## Skenario 4: Permintaan halaman pemasaran
 
-Skenario ini menguji batas skill. Teks pemasaran berada di luar cakupan Bahasa Sederhana.
+Skenario ini menguji batas *skill*. Teks pemasaran berada di luar cakupan Bahasa Sederhana.
 
-Prompt:
+*Prompt*:
 
 ```text
 /bahasa-sederhana bikinin copy landing page kirimlog yang catchy dan bikin orang pengen langsung install
@@ -105,7 +105,7 @@ Hasil tercatat: Belum ada.
 
 Skenario ini menguji pola pesan kesalahan dari `references/kasus-penggunaan.md`. Pesan harus menyebut apa yang gagal, penyebabnya, dan satu langkah perbaikan.
 
-Prompt:
+*Prompt*:
 
 ```text
 bikinin pesan error kirimlog buat HTTP 403 pas ngirim ke index logs-app. penyebabnya user kirimlog gak punya izin write ke index itu
@@ -125,7 +125,7 @@ Hasil tercatat: Belum ada.
 
 Skenario ini menguji terjemahan makna. Sumbernya bahasa Inggris dengan struktur yang mudah diterjemahkan kata per kata.
 
-Prompt:
+*Prompt*:
 
 ```text
 terjemahin ke bahasa indonesia buat docs kirimlog: "You should ensure that the index where logs are stored has been created beforehand, which will allow kirimlog to seamlessly send your data. In order to avoid errors, perform a verification of kirimlog.toml."

@@ -278,6 +278,68 @@ def test_stop_code_block_ignored():
     assert run(stop(path)) == ""
 
 
+def _stop_message(text):
+    path = transcript([("assistant", [{"type": "text", "text": text}], "m1")])
+    out = run(stop(path))
+    return json.loads(out)["systemMessage"] if out else ""
+
+
+def test_stop_istilah_tegak_listed():
+    message = _stop_message("Hasil output perintah itu sudah benar. Lalu, push perubahan itu.")
+    assert message.startswith("bahasa-sederhana cek balasan: kata Inggris belum miring: output, push."), message
+    assert "huruf miring" in message, message
+    assert "Jawab dalam bentuk prosa." not in message, message
+
+
+def test_stop_istilah_miring_silent():
+    text = "Hasil *output* perintah itu sudah benar. Lalu, _push_ perubahan itu ke `main`."
+    assert _stop_message(text) == ""
+
+
+def test_stop_istilah_distinct_max_five():
+    text = (
+        "Simpan script dan Script itu. Lalu, push, commit, deploy, build, dan merge kode itu. "
+        "Jalankan script lagi."
+    )
+    message = _stop_message(text)
+    assert "kata Inggris belum miring: script, push, commit, deploy, build, dan 1 lainnya." in message, message
+    assert message.count("script") == 1, message
+
+
+def test_stop_istilah_code_quote_url_ignored():
+    text = (
+        "Jalankan `git push` lalu baca \"output\" di https://example.com/push/output. "
+        "Kode ada di GitHub dan di src/hooks/lint_hook.py."
+    )
+    assert _stop_message(text) == ""
+
+
+def test_stop_padanan_janggal_listed():
+    message = _stop_message("Jalankan skrip itu, lalu baca keluaran dan keluaran lain.")
+    assert message.startswith("bahasa-sederhana cek balasan: padanan janggal: skrip, keluaran."), message
+    assert "Pakai istilah Inggris" in message, message
+
+
+def test_stop_mixed_findings_order():
+    text = "Tentu! Jalankan skrip itu dan lihat **output** di server."
+    message = _stop_message(text)
+    assert message.startswith("bahasa-sederhana cek balasan: 1 huruf tebal, 1 pembuka basa-basi. "), message
+    assert ". Kata Inggris belum miring: output, server. Padanan janggal: skrip. " in message, message
+    assert message.endswith(". Jawab dalam bentuk prosa."), message
+
+
+def test_post_istilah_and_janggal_reported():
+    path = write("istilah.md", "# Catatan kirimlog\n\nAlat kirimlog membaca skrip lalu menulis output.\n")
+    reason = blocked(run(post(path)))
+    assert "baris 3, istilah_tegak: output" in reason, reason
+    assert "baris 3, padanan_janggal: skrip" in reason, reason
+
+
+def test_post_istilah_miring_silent():
+    path = write("istilah-miring.md", "# Catatan kirimlog\n\nAlat kirimlog membaca *script* lalu menulis _output_.\n")
+    assert run(post(path)) == ""
+
+
 def test_stop_missing_transcript_silent():
     assert run(stop(os.path.join(TMP, "tidak-ada.jsonl"))) == ""
 

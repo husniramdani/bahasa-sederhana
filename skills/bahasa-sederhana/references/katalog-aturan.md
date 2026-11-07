@@ -1,6 +1,6 @@
 # Katalog aturan: Bahasa Sederhana untuk teks perangkat lunak
 
-Berkas ini dipakai untuk mode periksa, untuk Mode Baku, dan untuk kode aturan yang dipertanyakan. `SKILL.md` memuat aturan yang paling banyak mengubah keluaran. Berkas ini memuat katalog lengkapnya.
+Berkas ini dipakai untuk mode periksa, untuk Mode Baku, dan untuk kode aturan yang dipertanyakan. `SKILL.md` memuat aturan yang paling banyak mengubah hasil tulisan. Berkas ini memuat katalog lengkapnya.
 
 Setiap aturan punya kode BS (Bahasa Sederhana). Kolom STE menyebut aturan ASD-STE100 Issue 9 yang menjadi asal aturan itu. Tanda "baru" berarti aturan itu khusus untuk bahasa Indonesia. Aturan bertanda (B) hanya berlaku dalam Mode Baku (lihat `mode-baku.md`). Kaidah ejaan merujuk ke EYD Edisi V. Bentuk kata merujuk ke KBBI.
 
@@ -15,7 +15,8 @@ Setiap aturan punya kode BS (Bahasa Sederhana). Kolom STE menyebut aturan ASD-ST
 | BS1.5 | 1.9, 1.10 | Pilih istilah yang pendek dan jelas. Ikuti kebijakan tiga kelompok di `istilah-teknis.md`. |
 | BS1.6 | 1.11 | Satu benda, satu nama. Jangan menulis "config" di satu tempat dan "pengaturan" di tempat lain. |
 | BS1.7 | 1.12 | Kata kerja domain boleh dipakai ("pasang", "jalankan", "unggah"). Jika ada kata kerja umum yang sama artinya, pakai kata itu: "temukan", bukan "deteksi". |
-| BS1.8 | baru | Tulis kata asing yang belum diserap dengan huruf miring pada pemakaian pertama di setiap dokumen, kecuali di dalam kode atau sebagai nama diri. |
+| BS1.8 | baru | Tulis setiap kata Inggris dengan huruf miring, setiap kali muncul, kecuali di dalam kode, nama produk, label UI yang dikutip, dan singkatan. |
+| BS1.11 | baru | Pakai istilah pemrograman dalam bahasa Inggris, bukan padanan yang jarang dipakai *developer*: *script*, bukan "skrip". *Output*, bukan "keluaran". *Push*, bukan "mendorong". |
 | BS1.9 | baru | Tulis "Anda" dengan huruf kapital di semua posisi. Pilih satu sapaan untuk seluruh dokumen. |
 
 Sebelum: Kamu bisa men-trigger webhook-nya, terus anda deploy aja servicenya.
@@ -93,10 +94,10 @@ Sesudah: Buat pengguna `kirimlog` di OpenSearch Dashboards. Lalu, tulis nama pen
 | BS7.2 | 7.2 | Mulai dengan perintah atau syarat yang jelas. |
 | BS7.3 | 7.3 | Lalu, sebut risikonya atau akibat yang dapat terjadi. |
 
-Taruh instruksi sebelum penjelasan. Pola yang sama berlaku untuk flag CLI yang merusak dan migrasi yang tidak dapat dibatalkan.
+Taruh instruksi sebelum penjelasan. Pola yang sama berlaku untuk *flag* CLI yang merusak dan migrasi yang tidak dapat dibatalkan.
 
 Sebelum: Perlu diperhatikan bahwa log lama mungkin saja ikut terhapus apabila flag --hapus-lama dipakai sebelum proses snapshot benar-benar selesai.
-Sesudah: PERINGATAN: Jangan pakai flag `--hapus-lama` sebelum *snapshot* selesai. Flag itu menghapus indeks lama beserta isinya.
+Sesudah: PERINGATAN: Jangan pakai *flag* `--hapus-lama` sebelum *snapshot* selesai. *Flag* itu menghapus indeks lama beserta isinya.
 
 ### Bagian 8: Tanda baca dan angka
 
@@ -106,14 +107,14 @@ Sesudah: PERINGATAN: Jangan pakai flag `--hapus-lama` sebelum *snapshot* selesai
 | BS8.2 | 8.2 | Pakai tanda hubung untuk kata ulang (anak-anak) dan untuk imbuhan pada kata asing (di-*deploy*). |
 | BS8.3 | 8.3 | Tanda kurung boleh untuk rujukan, singkatan, penjelasan istilah, dan pilihan. |
 | BS8.4 | 8.4 | Dalam daftar vertikal, titik dua pada kalimat pengantar mengakhiri kalimat itu. Setiap butir dihitung sebagai kalimat baru. |
-| BS8.5 | 8.5-8.7 | Hitung sebagai satu kata: teks dalam kurung, kata ulang, angka, angka dengan satuan, singkatan, identifier, teks kutipan, judul, label, dan nama diri. |
+| BS8.5 | 8.5-8.7 | Hitung sebagai satu kata: teks dalam kurung, kata ulang, angka, angka dengan satuan, singkatan, *identifier*, teks kutipan, judul, label, dan nama diri. |
 | BS8.6 | baru | Pakai koma untuk desimal dan titik untuk ribuan dalam prosa: 12,5%, 1.500 baris, Rp15.000. Angka dalam kode dan nomor versi tidak berubah. |
 | BS8.7 | baru | Tulis waktu dengan titik dan zona waktu: pukul 02.30 UTC, pukul 09.30 WIB. Tulis tanggal sebagai 7 November 2026. |
 | BS8.8 | baru | Ganti singkatan dll., dsb., dst., e.g., dan i.e. Sebut butirnya, atau pakai "misalnya" dan "yaitu". |
 
 Aturan BS8.5 penting untuk teks perangkat lunak. `kirimlog kirim --config kirimlog.toml` di dalam tanda petik terbalik dihitung satu kata.
 
-Tanda pisah (aturan skill ini, bukan aturan EYD): tanda pisah (`—`) di antara dua pernyataan menyembunyikan hubungan logisnya. Sebut hubungannya ("karena", "tetapi", "misalnya"), atau tulis dua kalimat. Tanda hubung berspasi atau tanda hubung ganda di antara pernyataan sama dengan tanda pisah. Rentang angka (`5–10`), penanda daftar, dan flag (`--force`) bukan tanda pisah.
+Tanda pisah (aturan *skill* ini, bukan aturan EYD): tanda pisah (`—`) di antara dua pernyataan menyembunyikan hubungan logisnya. Sebut hubungannya ("karena", "tetapi", "misalnya"), atau tulis dua kalimat. Tanda hubung berspasi atau tanda hubung ganda di antara pernyataan sama dengan tanda pisah. Rentang angka (`5–10`), penanda daftar, dan *flag* (`--force`) bukan tanda pisah.
 
 ### Bagian 9: Praktik menulis
 

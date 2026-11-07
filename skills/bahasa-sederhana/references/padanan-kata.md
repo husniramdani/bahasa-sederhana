@@ -75,7 +75,7 @@ Tabel ini milik Bahasa Sederhana, bukan daftar resmi Badan Bahasa. Tabel ini mem
 
 | Terjemahan harfiah | Tulis ini |
 |---|---|
-| server di mana aplikasi berjalan | *server* tempat aplikasi berjalan |
+| *server* di mana aplikasi berjalan | *server* tempat aplikasi berjalan |
 | fitur yang mana dipakai | fitur yang dipakai |
 | melakukan instalasi, melakukan pembaruan | memasang, memperbarui |
 | melakukan pengecekan, melakukan verifikasi | periksa, atau pastikan |

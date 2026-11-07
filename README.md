@@ -1,26 +1,26 @@
 # Bahasa Sederhana
 
-Skill untuk agen AI yang menulis bahasa Indonesia sederhana dan baku. Pembaca memahami teksnya dalam sekali baca, tanpa jargon dan tanpa gaya tulisan AI.
+*Skill* untuk agen AI yang menulis bahasa Indonesia sederhana dan baku. Pembaca memahami teksnya dalam sekali baca, tanpa jargon dan tanpa gaya tulisan AI.
 
 <p>
-  <a href="skills/bahasa-sederhana/SKILL.md"><img src="https://img.shields.io/badge/versi-1.0.0-blue?style=flat" alt="versi 1.0.0"></a>
+  <a href="skills/bahasa-sederhana/SKILL.md"><img src="https://img.shields.io/badge/versi-1.1.0-blue?style=flat" alt="versi 1.1.0"></a>
   <a href="https://agentskills.io"><img src="https://img.shields.io/badge/SKILL.md-standar_terbuka-blue?style=flat" alt="Agent Skills"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/lisensi-MIT-lightgrey?style=flat" alt="MIT"></a>
 </p>
 
 Aturannya memakai disiplin [ASD-STE100](https://www.asd-ste100.org/), standar bahasa terkendali untuk manual teknis. Setiap aturan disesuaikan dengan tata bahasa Indonesia, EYD Edisi V, dan KBBI. Aturan yang tidak cocok untuk bahasa Indonesia diganti. Aturan khusus bahasa Indonesia ditambahkan.
 
-Skill ini dapat dipakai di setiap agen yang membaca [standar Agent Skills](https://agentskills.io). Contohnya Claude Code, Cursor, VS Code Copilot, OpenAI Codex, Gemini CLI, dan OpenCode.
+*Skill* ini dapat dipakai di setiap agen yang membaca [standar Agent Skills](https://agentskills.io). Contohnya Claude Code, Cursor, VS Code Copilot, OpenAI Codex, Gemini CLI, dan OpenCode.
 
 ## Contoh
 
-Teks pertama adalah gaya tulisan AI berbahasa Indonesia yang umum. Teks kedua adalah isi yang sama setelah skill ini dipakai.
+Teks pertama adalah gaya tulisan AI berbahasa Indonesia yang umum. Teks kedua adalah isi yang sama setelah *skill* ini dipakai.
 
-Tanpa skill:
+Tanpa *skill*:
 
 > kirimlog adalah merupakan sebuah tool CLI yang dirancang untuk mengirimkan log-log aplikasi Anda ke OpenSearch, yang mana memungkinkan tim Anda untuk memonitor sistem secara mulus. Sebelum memulai, Anda sebaiknya memastikan index tujuan telah dibuat — hal ini sangat krusial untuk menghindari error di kemudian hari.
 
-Dengan skill:
+Dengan *skill*:
 
 > Alat baris perintah kirimlog mengirim log aplikasi ke OpenSearch.
 >
@@ -32,41 +32,41 @@ Contoh lain ada di [`examples/sebelum-sesudah.md`](examples/sebelum-sesudah.md).
 
 Pilih satu cara.
 
-Untuk semua agen, dengan [skills CLI](https://github.com/vercel-labs/skills). Cara ini hanya memasang skill:
+Untuk semua agen, dengan [skills CLI](https://github.com/vercel-labs/skills). Cara ini hanya memasang *skill*:
 
 ```bash
 npx skills add husniramdani/bahasa-sederhana
 ```
 
-Untuk Claude Code, dengan hook dan gaya keluaran:
+Untuk Claude Code, dengan *hook* dan *output style*:
 
 ```bash
 claude plugin marketplace add husniramdani/bahasa-sederhana
 claude plugin install bahasa-sederhana@bahasa-sederhana
 ```
 
-Untuk memakai gaya keluaran, buka `/config` dan pilih `bahasa-sederhana:bahasa-sederhana` di bagian *Output style*.
+Untuk memakai *output style*, buka `/config`, lalu pilih `bahasa-sederhana:bahasa-sederhana` di bagian `Output style`.
 
-Untuk Codex, dengan hook sesi:
+Untuk Codex, dengan *hook* sesi:
 
 ```bash
 codex plugin marketplace add husniramdani/bahasa-sederhana
 codex plugin add bahasa-sederhana@bahasa-sederhana
 ```
 
-Hook membutuhkan Node.js dan Python 3. Penjelasan setiap hook ada di [`src/hooks/README.md`](src/hooks/README.md).
+*Hook* membutuhkan Node.js dan Python 3. Penjelasan setiap *hook* ada di [`src/hooks/README.md`](src/hooks/README.md).
 
-Jika alat Anda tidak membaca skill, salin blok aturan dari [`prompts/system-prompt.md`](prompts/system-prompt.md) ke prompt sistem, `AGENTS.md`, atau `.cursorrules`.
+Jika alat Anda tidak membaca *skill*, salin blok aturan dari [`prompts/system-prompt.md`](prompts/system-prompt.md) ke *prompt* sistem, `AGENTS.md`, atau `.cursorrules`.
 
 ## Cara memakai
 
 Ketik `/bahasa-sederhana`, lalu tempel teks Anda atau jelaskan dokumen yang Anda butuhkan. Permintaan biasa juga berhasil, misalnya "tulis ulang README ini dengan bahasa sederhana".
 
-Teks sumber boleh berbahasa Inggris. Hasilnya selalu bahasa Indonesia. Skill ini menerjemahkan makna, bukan susunan kata.
+Teks sumber boleh berbahasa Inggris. Hasilnya selalu bahasa Indonesia. *Skill* ini menerjemahkan makna, bukan susunan kata.
 
 ## Isi aturan
 
-[`SKILL.md`](skills/bahasa-sederhana/SKILL.md) punya dua ragam. Ragam Dokumen berlaku untuk teks yang Anda simpan: dokumentasi, README, runbook, pesan kesalahan, dan catatan rilis. Ragam Balasan berlaku untuk jawaban di obrolan.
+[`SKILL.md`](skills/bahasa-sederhana/SKILL.md) punya dua ragam. Ragam Dokumen berlaku untuk teks yang Anda simpan: dokumentasi, README, *runbook*, pesan kesalahan, dan catatan rilis. Ragam Balasan berlaku untuk jawaban di obrolan.
 
 Ragam Dokumen:
 
@@ -79,7 +79,7 @@ Ragam Dokumen:
 | Satu kata untuk satu makna | "cek", "periksa", dan "verifikasi" dalam satu dokumen |
 | Ejaan EYD V dan bentuk baku KBBI | "merubah", "dimana", "anda", "resiko" |
 | Tanpa struktur kalimat bahasa Inggris | "server di mana aplikasi berjalan", "melakukan pengecekan" |
-| Istilah teknis yang dikenal pembaca | Padanan resmi yang jarang dipakai, atau istilah Inggris yang sudah punya padanan umum |
+| Istilah pemrograman tetap bahasa Inggris dan ditulis miring | "skrip", "keluaran", "mendorong *repo*", dan *output* yang tidak miring |
 | Fakta, bukan hiasan | "krusial", "tangguh", "tidak hanya X, tetapi juga Y" |
 
 Ragam Balasan:
@@ -115,12 +115,12 @@ ASD-STE100 ditulis untuk bahasa Inggris. Tabel ini menunjukkan aturan yang digan
 | Kamus kata yang disetujui | Mode Baku dengan EYD V, KBBI, dan Pasti | Bahasa Indonesia tidak punya kamus bahasa terkendali. |
 | Tidak ada | Format angka: 12,5%, Rp15.000, pukul 09.30 | EYD V memakai koma desimal dan titik ribuan. |
 | Tidak ada | "di mana" bukan kata penghubung, tanpa "melakukan" ditambah kata benda | Kesalahan terjemahan dari bahasa Inggris yang paling sering muncul. |
-| Tidak ada | Kebijakan istilah teknis tiga kelompok | Sebagian padanan resmi belum dikenal luas. |
+| Tidak ada | Istilah pemrograman dalam bahasa Inggris, selalu miring | *Developer* Indonesia memakai istilah itu setiap hari, dan EYD V memiringkan kata asing. |
 | Tidak ada | "Anda" selalu kapital, satu sapaan per dokumen | Kesalahan sapaan sering muncul di teks produk. |
 
-## Linter
+## *Linter*
 
-[`evals/bahasa_lint.py`](evals/bahasa_lint.py) menghitung pelanggaran yang dapat ditemukan dengan pola teks. Linter ini memakai Python 3 tanpa pustaka tambahan.
+[`evals/bahasa_lint.py`](evals/bahasa_lint.py) menghitung pelanggaran yang dapat ditemukan dengan pola teks. *Linter* ini memakai Python 3 tanpa *library* tambahan.
 
 ```bash
 python3 evals/bahasa_lint.py --type procedural panduan.md
@@ -128,13 +128,13 @@ python3 evals/bahasa_lint.py --type descriptive catatan-rilis.md
 python3 evals/bahasa_lint.py --self-test
 ```
 
-Linter ini memeriksa 14 jenis pelanggaran, termasuk kata tidak baku, kata gaya AI, terjemahan harfiah, dan sinonim yang berganti-ganti. Daftar katanya ada di `evals/nonbaku.tsv` dan `evals/slop.tsv`.
+*Linter* ini memeriksa 16 jenis pelanggaran, termasuk kata tidak baku, kata gaya AI, terjemahan harfiah, sinonim yang berganti-ganti, kata Inggris yang belum miring, dan padanan yang janggal. Daftar katanya ada di folder `evals`, dalam berkas berakhiran `.tsv`. Untuk dokumen Mode Baku, tambahkan `--mode baku`.
 
-Linter ini membaca pola, bukan makna. Pakai linter ini untuk membandingkan dua versi teks, bukan sebagai bukti bahwa teks sudah benar.
+*Linter* ini membaca pola, bukan makna. Pakai *linter* ini untuk membandingkan dua versi teks, bukan sebagai bukti bahwa teks sudah benar.
 
-## Benchmark
+## *Benchmark*
 
-Belum ada hasil benchmark. Skenarionya ada di `evals/scenarios.json` dan `evals/reply_scenarios.json`. Untuk menjalankannya, Anda butuh Claude Code CLI yang sudah masuk:
+Belum ada hasil *benchmark*. Skenarionya ada di `evals/scenarios.json` dan `evals/reply_scenarios.json`. Untuk menjalankannya, Anda butuh Claude Code CLI yang sudah masuk:
 
 ```bash
 python3 evals/run_bench.py --smoke
@@ -165,4 +165,4 @@ Jika Anda menambah kata ke `evals/nonbaku.tsv` atau `evals/slop.tsv`, sebut sumb
 
 ## Lisensi
 
-MIT. Repositori ini merangkum aturan dengan kata-kata sendiri dan tidak menyalin teks ASD-STE100, EYD V, atau KBBI. Proyek ini tidak resmi dan tidak berafiliasi dengan ASD atau Badan Pengembangan dan Pembinaan Bahasa. ASD-STE100 adalah merek dagang terdaftar milik ASD.
+MIT. *Repo* ini merangkum aturan dengan kata-kata sendiri dan tidak menyalin teks ASD-STE100, EYD V, atau KBBI. Proyek ini tidak resmi dan tidak berafiliasi dengan ASD atau Badan Pengembangan dan Pembinaan Bahasa. ASD-STE100 adalah merek dagang terdaftar milik ASD.

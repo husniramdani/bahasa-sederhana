@@ -11,7 +11,7 @@
       "source": "./",
       "displayName": "Bahasa Sederhana",
       "description": "Tulis bahasa Indonesia yang sederhana, baku, dan mudah dipahami pembaca awam, dengan disiplin ASD-STE100 yang disesuaikan untuk bahasa Indonesia: kalimat pendek, satu kata satu makna, syarat sebelum perintah, ejaan EYD V dan KBBI, tanpa gaya tulisan AI.",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": {
         "name": "Husni Ramdani"
       },

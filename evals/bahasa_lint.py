@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Linter pola teks untuk Bahasa Sederhana.
 
-Linter ini menghitung 14 jenis pelanggaran yang dapat ditangkap dengan pola
+Linter ini menghitung 16 jenis pelanggaran yang dapat ditangkap dengan pola
 teks. Linter ini membaca pola, bukan tata bahasa. Pakai hasilnya untuk
 membandingkan dua teks, bukan sebagai bukti kepatuhan.
 
@@ -10,13 +10,18 @@ Pemakaian:
     python3 evals/bahasa_lint.py --type procedural dokumen.md
     python3 evals/bahasa_lint.py --type reply - < balasan.txt
     python3 evals/bahasa_lint.py --type descriptive --gate 0 README.md
+    python3 evals/bahasa_lint.py --type descriptive --mode baku surat.md
     python3 evals/bahasa_lint.py --self-test
 
 Fungsi untuk modul lain:
 
-    lint(text, text_type)         -> ringkasan dan jumlah per kategori
-    lint_detail(text, text_type)  -> daftar {category, text, line}
-    reader_check(text)            -> hitungan format yang terlihat di balasan obrolan
+    lint(text, text_type, mode="sederhana")         -> ringkasan dan jumlah per kategori
+    lint_detail(text, text_type, mode="sederhana")  -> daftar {category, text, line}
+    reader_check(text)  -> hitungan format yang terlihat di balasan obrolan
+
+Mode "sederhana" (bawaan) memakai istilah pemrograman dalam bahasa Inggris,
+misalnya *script*, *output*, dan *push*. Mode "baku" memakai padanan resmi, jadi
+kategori padanan_janggal dilewati.
 
 Cara menghitung:
 
@@ -28,6 +33,11 @@ Cara menghitung:
   Nilai `words` menghitung semua kata, termasuk isi kurung.
 - Setiap sel tabel, butir daftar, dan judul dihitung sebagai satu satuan
   kalimat tersendiri.
+- Kategori istilah_tegak memeriksa setiap baris sebelum tanda penegasan dibuang,
+  jadi huruf miring (*kata* atau _kata_) tetap terlihat. Huruf tebal saja
+  (**kata**) bukan huruf miring. Nama berkas, path, dan nama produk CamelCase
+  seperti GitHub dilewati.
+- Kategori padanan_janggal dilewati dalam mode "baku".
 - Nomor baris selalu merujuk ke teks asli.
 
 Hanya pustaka standar Python 3.
@@ -38,10 +48,12 @@ import json
 import os
 import re
 import sys
+import unicodedata
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 TYPES = ("procedural", "descriptive", "reply")
+MODES = ("sederhana", "baku")
 LIMITS = {"procedural": 20, "descriptive": 25, "reply": None}
 
 CATEGORIES = (
@@ -59,6 +71,8 @@ CATEGORIES = (
     "pleonasme",
     "syarat_di_belakang",
     "rotasi_sinonim",
+    "istilah_tegak",
+    "padanan_janggal",
 )
 
 READER_KEYS = (
@@ -69,6 +83,8 @@ READER_KEYS = (
     "kata_cakapan",
     "pembuka",
     "penutup",
+    "istilah_tegak",
+    "padanan_janggal",
 )
 
 # Token pengganti. Setiap token dihitung satu kata dan tidak cocok dengan pola apa pun.
@@ -121,6 +137,24 @@ def _phrase_regex(phrases):
 SLOP_RE = _phrase_regex(_load_first_column("slop.tsv"))
 NONBAKU_RE = _phrase_regex(_load_first_column("nonbaku.tsv"))
 ANDA_LOWER_RE = re.compile(L + "anda" + R)
+ISTILAH = _load_first_column("istilah_inggris.tsv")
+JANGGAL_RE = _phrase_regex(_load_first_column("padanan_janggal.tsv"))
+
+
+def _istilah_regex(terms):
+    """Istilah Inggris sebagai kata utuh, dengan imbuhan Indonesia yang mungkin menempel.
+
+    Contoh yang cocok: output, repo-nya, di-deploy, men-deploy, dideploy, mengdeploy.
+    """
+    if not terms:
+        return None
+    parts = [r"\s+".join(re.escape(w) for w in t.split()) for t in sorted(set(terms), key=len, reverse=True)]
+    prefix = r"(?:[^\W\d_]+-|menge|meng|mem|men|me|peng|pem|pen|pe|ber|ter|di|ke)?"
+    suffix = r"(?:-?(?:nya|kan|lah))?"
+    return _flags_ci(L + prefix + "(?:" + "|".join(parts) + ")" + suffix + R)
+
+
+ISTILAH_RE = _istilah_regex(ISTILAH)
 
 # ---------------------------------------------------------------------------
 # Pola per kategori
@@ -332,10 +366,99 @@ def preprocess(text):
     masked = MD_LINK_RE.sub(r"\1", masked)
     masked = MD_REFLINK_RE.sub(r"\1", masked)
     masked = masked.replace("<" + URL + ">", URL)
-    masked = HTML_TAG_RE.sub(" ", masked)
+    masked = HTML_TAG_RE.sub(lambda m: "\n" * m.group(0).count("\n") or " ", masked)
     masked = HTML_ENTITY_RE.sub(" ", masked)
     masked = QUOTE_RE.sub(QUOTE, masked)
     return masked
+
+
+# ---------------------------------------------------------------------------
+# Huruf miring untuk istilah Inggris
+
+
+def _is_punct(ch):
+    return unicodedata.category(ch)[0] in "PS"
+
+
+def _italic_spans(line):
+    """Kembalikan rentang (awal, akhir) isi penegasan miring di satu baris.
+
+    Algoritme ini meniru aturan pembatas CommonMark secara sederhana. Pasangan
+    ** atau __ adalah huruf tebal. Pasangan * atau _ adalah huruf miring. Jadi
+    ***kata*** menjadi tebal dan miring, sedangkan **kata** hanya tebal.
+    """
+    runs = []
+    for m in re.finditer(r"\*+|_+", line):
+        s, e = m.span()
+        before = line[s - 1] if s > 0 else " "
+        after = line[e] if e < len(line) else " "
+        b_ws, a_ws = before.isspace(), after.isspace()
+        b_p, a_p = _is_punct(before), _is_punct(after)
+        left = not a_ws and (not a_p or b_ws or b_p)
+        right = not b_ws and (not b_p or a_ws or a_p)
+        if m.group(0)[0] == "*":
+            can_open, can_close = left, right
+        else:
+            can_open = left and (not right or b_p)
+            can_close = right and (not left or a_p)
+        # [karakter, awal, akhir, bisa_membuka, bisa_menutup]
+        runs.append([m.group(0)[0], s, e, can_open, can_close])
+
+    spans = []
+    stack = []
+    for i, run in enumerate(runs):
+        if run[4]:
+            j = len(stack) - 1
+            while run[2] > run[1] and j >= 0:
+                opener = runs[stack[j]]
+                if opener[0] != run[0] or opener[2] <= opener[1]:
+                    j -= 1
+                    continue
+                use = 2 if opener[2] - opener[1] >= 2 and run[2] - run[1] >= 2 else 1
+                if use == 1:
+                    spans.append((opener[2], run[1]))
+                opener[2] -= use
+                run[1] += use
+                del stack[j + 1:]
+                if opener[2] <= opener[1]:
+                    del stack[j]
+                    j -= 1
+        if run[3] and run[2] > run[1]:
+            stack.append(i)
+    return spans
+
+
+TOKEN_CHARS_RE = re.compile(r"[\w./\\~-]")
+
+
+def _surrounding_token(line, start, end):
+    a = start
+    while a > 0 and TOKEN_CHARS_RE.match(line[a - 1]):
+        a -= 1
+    b = end
+    while b < len(line) and TOKEN_CHARS_RE.match(line[b]):
+        b += 1
+    return line[a:b]
+
+
+def _istilah_hits(line):
+    """Kembalikan (posisi, teks) untuk istilah Inggris tanpa huruf miring di satu baris."""
+    if ISTILAH_RE is None or not line.strip():
+        return []
+    spans = None
+    hits = []
+    for m in ISTILAH_RE.finditer(line):
+        token = _surrounding_token(line, m.start(), m.end())
+        if "/" in token or "\\" in token or re.search(r"\.\w", token):
+            continue  # nama berkas atau path
+        if re.search(r"[^\W\d_][A-Z]", token):
+            continue  # nama produk seperti GitHub atau OpenSearch
+        if spans is None:
+            spans = _italic_spans(line)
+        if any(a <= m.start() and m.end() <= b for a, b in spans):
+            continue
+        hits.append((m.start(), re.sub(r"\s+", " ", m.group(0))))
+    return hits
 
 
 # ---------------------------------------------------------------------------
@@ -537,21 +660,32 @@ def _synonym_tokens(sentence):
                     break
 
 
-def lint_detail(text, text_type):
-    """Kembalikan daftar temuan {category, text, line}, urut menurut baris."""
+def _check_args(text_type, mode):
     if text_type not in TYPES:
         raise ValueError("jenis teks tidak dikenal: %r" % (text_type,))
-    details, _ = _analyze(text, text_type)
+    if mode not in MODES:
+        raise ValueError("mode tidak dikenal: %r" % (mode,))
+
+
+def lint_detail(text, text_type, mode="sederhana"):
+    """Kembalikan daftar temuan {category, text, line}, urut menurut baris."""
+    _check_args(text_type, mode)
+    details, _ = _analyze(text, text_type, mode)
     return details
 
 
-def _analyze(text, text_type):
+def _analyze(text, text_type, mode="sederhana"):
     limit = LIMITS[text_type]
     masked = preprocess(text)
     details = []
     stats = {"words": 0, "lengths": []}
     first_stem = {}
     seen_extra = set()
+
+    # Istilah Inggris diperiksa per baris sebelum tanda penegasan dibuang.
+    for number, line in enumerate(masked.split("\n"), 1):
+        for _, term in _istilah_hits(line):
+            details.append({"category": "istilah_tegak", "text": term, "line": number})
 
     for unit_text, line_numbers in _units(masked):
         def line_of(offset, _t=unit_text, _n=line_numbers):
@@ -606,6 +740,9 @@ def _analyze(text, text_type):
             for regex in PLEONASME_RES:
                 for m in regex.finditer(sentence):
                     add("pleonasme", m.start(), m.group(0))
+            if mode != "baku" and JANGGAL_RE is not None:
+                for m in JANGGAL_RE.finditer(sentence):
+                    add("padanan_janggal", m.start(), m.group(0))
             if text_type == "procedural":
                 hit = _syarat_hit(sentence)
                 if hit:
@@ -621,11 +758,10 @@ def _analyze(text, text_type):
     return details, stats
 
 
-def lint(text, text_type):
+def lint(text, text_type, mode="sederhana"):
     """Kembalikan ringkasan pelanggaran untuk satu teks."""
-    if text_type not in TYPES:
-        raise ValueError("jenis teks tidak dikenal: %r" % (text_type,))
-    details, stats = _analyze(text, text_type)
+    _check_args(text_type, mode)
+    details, stats = _analyze(text, text_type, mode)
     counts = {c: 0 for c in CATEGORIES}
     for d in details:
         counts[d["category"]] += 1
@@ -634,6 +770,7 @@ def lint(text, text_type):
     total = sum(counts.values())
     return {
         "type": text_type,
+        "mode": mode,
         "words": words,
         "sentences": len(lengths),
         "mean_sentence_words": round(sum(lengths) / len(lengths), 1) if lengths else 0.0,
@@ -657,6 +794,8 @@ def reader_check(text):
     counts = {k: 0 for k in READER_KEYS}
     counts["tanda_pisah"] = sum(1 for d in details if d["category"] == "tanda_pisah")
     counts["kata_cakapan"] = sum(1 for d in details if d["category"] == "kata_cakapan")
+    counts["istilah_tegak"] = sum(1 for d in details if d["category"] == "istilah_tegak")
+    counts["padanan_janggal"] = sum(1 for d in details if d["category"] == "padanan_janggal")
     counts["huruf_tebal"] = len(BOLD_RE.findall(prose))
     for line in prose.split("\n"):
         if HEADING_RE.match(line):
@@ -697,7 +836,7 @@ Sebelum mulai, kamu sebaiknya cek dulu apakah Python sudah terpasang di mesin an
 3. Jalankan `kirimlog kirim --config kirimlog.toml` apabila konfigurasi sudah benar.
 4. Konfigurasi itu telah diperiksa oleh tim sebelum rilis.
 
-Jika muncul error 401, verifikasi kata sandi di server di mana pengguna OpenSearch dibuat.
+Jika muncul error 401, verifikasi kata sandi di peladen di mana pengguna OpenSearch dibuat.
 """
 
 CLEAN_FIXTURE = """# Memulai kirimlog
@@ -708,16 +847,18 @@ Alat kirimlog membaca berkas log aplikasi dan mengirim isinya ke OpenSearch.
 
 1. Pasang kirimlog dengan `pip install kirimlog`.
 2. Buka berkas konfigurasi `kirimlog.toml`.
-3. Isi alamat OpenSearch dan port 9200.
+3. Isi alamat OpenSearch dan *port* 9200.
 4. Jalankan `kirimlog kirim --config kirimlog.toml`.
 
 ## Jika pengiriman gagal
 
-Jika kirimlog menampilkan `connection refused`, pastikan OpenSearch berjalan di port 9200.
+Jika kirimlog menampilkan `connection refused`, pastikan OpenSearch berjalan di _port_ 9200.
 
 Jika OpenSearch menjawab dengan HTTP 401, periksa kata sandi di `kirimlog.toml`.
 
 Jika OpenSearch menjawab dengan HTTP 403, beri pengguna itu izin menulis ke indeks. Panduan izin ada di https://example.com/kirimlog/izin.
+
+Simpan *output* perintah itu di *repo*-nya, lalu jalankan *pull request* untuk *merge* *branch* itu.
 """
 
 
@@ -747,8 +888,10 @@ def _self_test():
 
     # Fixture bersih tidak punya pelanggaran.
     for text_type in ("procedural", "descriptive"):
-        clean = lint(CLEAN_FIXTURE, text_type)
-        check("bersih_" + text_type, clean["violations_total"] == 0, json.dumps(lint_detail(CLEAN_FIXTURE, text_type)))
+        for mode in MODES:
+            clean = lint(CLEAN_FIXTURE, text_type, mode)
+            check("bersih_%s_%s" % (text_type, mode), clean["violations_total"] == 0,
+                  json.dumps(lint_detail(CLEAN_FIXTURE, text_type, mode)))
 
     # Jumlah detail sama dengan jumlah ringkasan.
     for fixture in (SLOPPY_FIXTURE, CLEAN_FIXTURE):
@@ -775,7 +918,7 @@ def _self_test():
     for word, sentence in (
         ("mengkritik", "Tim keamanan mengkritik rancangan pengirim yang lama."),
         ("memproses", "Pengurai memproses setiap baris log."),
-        ("dikirim", "Setiap batch dikirim ke OpenSearch dengan bulk API."),
+        ("dikirim", "Setiap *batch* dikirim ke OpenSearch dengan bulk API."),
     ):
         check("baku_" + word, lint(sentence, "descriptive")["violations_total"] == 0, json.dumps(lint_detail(sentence, "descriptive")))
 
@@ -800,20 +943,26 @@ def _self_test():
     check("syarat_di_depan", count("Jika snapshot sudah ada, hapus indeks lama.", "procedural", "syarat_di_belakang") == 0)
 
     # Kata terlarang di dalam tanda petik tidak dihitung.
-    quoted = 'Jangan tulis "sebaiknya" atau “mungkin” di runbook kirimlog.'
+    quoted = 'Jangan tulis "sebaiknya" atau “mungkin” di *runbook* kirimlog.'
     check("kutipan", lint(quoted, "procedural")["violations_total"] == 0, json.dumps(lint_detail(quoted, "procedural")))
     check("kutipan_satu_kata", lint('Tulis "jalankan kirimlog dengan konfigurasi baru".', "procedural")["words"] == 2)
 
     # Nomor baris tetap benar setelah frontmatter, tabel, dan blok kode.
     table_text = (
         "---\njudul: x\n---\n"
-        "| Kolom | Arti |\n|---|---|\n| `source_host` | Nama host sumber |\n"
+        "| Kolom | Arti |\n|---|---|\n| `source_host` | Nama *host* sumber |\n"
         "\n```toml\nsource_host = \"app-1\" ; komentar\n```\n\n"
         "Jalankan kirimlog; tunggu sampai selesai.\n"
     )
     hits = lint_detail(table_text, "procedural")
     check("baris_setelah_tabel", [(d["category"], d["line"]) for d in hits] == [("titik_koma", 12)], json.dumps(hits))
     check("sel_tabel_kalimat", lint(table_text, "procedural")["sentences"] == 5)
+    table_terms = table_text + "| Kolom | Arti |\n|---|---|\n| `port` | Nomor port tujuan |\n\nJalankan script itu.\n"
+    hits = [(d["text"], d["line"]) for d in lint_detail(table_terms, "procedural") if d["category"] == "istilah_tegak"]
+    check("istilah_baris_setelah_tabel", hits == [("port", 15), ("script", 17)], json.dumps(hits))
+    html_text = '<p\n  align="center">\n</p>\n\nJalankan script itu.\n'
+    hits = [d["line"] for d in lint_detail(html_text, "procedural") if d["category"] == "istilah_tegak"]
+    check("istilah_baris_setelah_tag_html", hits == [5], json.dumps(hits))
 
     # URL dalam kurung yang diikuti titik.
     url_text = "Baca panduan OpenSearch (https://opensearch.org/docs/latest). Lalu, jalankan kirimlog."
@@ -857,6 +1006,66 @@ def _self_test():
     except ValueError:
         raised = True
     check("jenis_tidak_dikenal", raised)
+    try:
+        lint("x", "reply", "santai")
+        raised = False
+    except ValueError:
+        raised = True
+    check("mode_tidak_dikenal", raised)
+
+    # Istilah Inggris harus miring.
+    def tegak(text):
+        return [d["text"] for d in lint_detail(text, "descriptive") if d["category"] == "istilah_tegak"]
+
+    check("istilah_termuat", ISTILAH_RE is not None and JANGGAL_RE is not None and len(ISTILAH) >= 50)
+    for name, text, expected in (
+        ("istilah_polos", "Jalankan script itu.", ["script"]),
+        ("istilah_miring", "Jalankan *script* itu.", []),
+        ("istilah_miring_garis_bawah", "Jalankan _script_ itu.", []),
+        ("istilah_frasa_miring", "Buka *pull request* baru.", []),
+        ("istilah_frasa_polos", "Buka pull request baru.", ["pull request"]),
+        ("istilah_frasa_sebagian", "Buka *pull* request baru.", []),
+        ("istilah_frasa_sebagian_akhir", "Buka pull *request* baru.", ["pull"]),
+        ("istilah_frasa_panjang", "Lalu, *merge branch itu ke main*.", []),
+        ("istilah_dua_miring", "Lalu, *merge* *branch* itu.", []),
+        ("istilah_imbuhan_miring", "Kode itu sudah di-*deploy* dan men-*push* tag.", []),
+        ("istilah_imbuhan_hubung", "Kode itu sudah di-deploy.", ["di-deploy"]),
+        ("istilah_imbuhan_men", "Tim itu men-deploy kode.", ["men-deploy"]),
+        ("istilah_imbuhan_menempel", "Kode itu dideploy lalu mengdeploy ulang.", ["dideploy", "mengdeploy"]),
+        ("istilah_nya", "Buka repo-nya.", ["repo-nya"]),
+        ("istilah_nya_miring", "Buka *repo*-nya.", []),
+        ("istilah_kode", "Jalankan `script` itu.", []),
+        ("istilah_petik", 'Jangan tulis "script" di sini.', []),
+        ("istilah_petik_lengkung", "Jangan tulis “push” di sini.", []),
+        ("istilah_url", "Buka https://example.com/push/output sekarang.", []),
+        ("istilah_tautan", "Baca [panduan](docs/push.md) dan [ini](https://x.com/repo).", []),
+        ("istilah_teks_tautan", "Baca [repo ini](https://x.com/a).", ["repo"]),
+        ("istilah_github", "Simpan kode di GitHub dan OpenSearch.", []),
+        ("istilah_berkas", "Buka hook.py dan src/hooks/lint_hook.py.", []),
+        ("istilah_tebal", "Lihat **output** itu.", ["output"]),
+        ("istilah_tebal_miring", "Lihat ***output*** itu.", []),
+        ("istilah_tebal_berisi_miring", "**Lihat *output* itu.**", []),
+        ("istilah_kapital", "Server menolak permintaan itu.", ["Server"]),
+        ("istilah_bukan_kata_utuh", "Kode debug dan webhook berbeda dari pengait.", ["debug", "webhook"]),
+        ("istilah_html", '<a href="push.html" title="deploy">Klik</a> di sini.', []),
+        ("istilah_frontmatter", "---\njudul: script dan output\n---\nTeks biasa.", []),
+        ("istilah_blok_kode", "```\ngit push origin main\n```\nTeks biasa.", []),
+        ("istilah_snake_case", "Isi source_host sekarang.", []),
+    ):
+        check(name, tegak(text) == expected, json.dumps(tegak(text)))
+    check("istilah_balasan", count("Jalankan script itu.", "reply", "istilah_tegak") == 1)
+    check("istilah_mode_baku", count("Jalankan script itu.", "descriptive", "istilah_tegak") == 1
+          and lint("Jalankan script itu.", "descriptive", "baku")["violations"]["istilah_tegak"] == 1)
+
+    # Padanan janggal ditandai, kecuali dalam mode baku.
+    check("janggal_skrip", count("Jalankan skrip itu.", "descriptive", "padanan_janggal") == 1)
+    check("janggal_skrip_baku", lint("Jalankan skrip itu.", "descriptive", "baku")["violations"]["padanan_janggal"] == 0)
+    check("janggal_keluaran", count("Baca keluaran perintah itu.", "descriptive", "padanan_janggal") == 1)
+    check("janggal_frasa", [d["text"] for d in lint_detail("Lalu, mendorong   perubahan ke Peladen.", "descriptive")
+                            if d["category"] == "padanan_janggal"] == ["mendorong perubahan", "Peladen"])
+    check("janggal_petik", count('Jangan tulis "skrip" di sini.', "descriptive", "padanan_janggal") == 0)
+    check("janggal_kode", count("Jalankan `keluaran` sekarang.", "descriptive", "padanan_janggal") == 0)
+    check("janggal_kata_utuh", count("Pustakawan membaca berkas itu.", "descriptive", "padanan_janggal") == 0)
 
     # Pemeriksaan balasan obrolan.
     messy = (
@@ -874,10 +1083,12 @@ def _self_test():
     check("balasan_tebal", rc["huruf_tebal"] == 1)
     check("balasan_pisah", rc["tanda_pisah"] == 1)
     check("balasan_cakapan", rc["kata_cakapan"] == 1)
+    check("balasan_istilah", rc["istilah_tegak"] == 1)
+    check("balasan_janggal", reader_check("Jalankan skrip itu.")["padanan_janggal"] == 1)
     check("balasan_total", rc["visible_total"] == sum(rc[k] for k in READER_KEYS))
     calm = (
-        "Port 9200 di host OpenSearch tertutup. Akibatnya, kirimlog berhenti dengan `connection refused`. "
-        "Jalankan OpenSearch dulu, lalu kirim ulang batch itu.\n\n```bash\nkirimlog kirim --config kirimlog.toml\n- bukan butir\n```"
+        "*Port* 9200 di *host* OpenSearch tertutup. Akibatnya, kirimlog berhenti dengan `connection refused`. "
+        "Jalankan OpenSearch dulu, lalu kirim ulang *batch* itu.\n\n```bash\nkirimlog kirim --config kirimlog.toml\n- bukan butir\n```"
     )
     check("balasan_bersih", reader_check(calm)["visible_total"] == 0, json.dumps(reader_check(calm)))
     check("balasan_inggris", reader_check("Sure, here it is. Hope this helps!")["visible_total"] == 2)
@@ -895,6 +1106,8 @@ def main(argv=None):
         description="Hitung pelanggaran Bahasa Sederhana yang dapat ditangkap dengan pola teks."
     )
     parser.add_argument("--type", choices=TYPES, help="jenis teks: procedural, descriptive, atau reply")
+    parser.add_argument("--mode", choices=MODES, default="sederhana",
+                        help="sederhana (bawaan, istilah Inggris) atau baku (padanan resmi)")
     parser.add_argument("--gate", type=int, default=None, help="keluar dengan kode 1 jika total pelanggaran lebih dari N")
     parser.add_argument("--detail", action="store_true", help="sertakan daftar temuan per baris")
     parser.add_argument("--self-test", action="store_true", help="jalankan uji bawaan")
@@ -923,9 +1136,9 @@ def main(argv=None):
             print("Berkas tidak dapat dibaca: %s" % exc, file=sys.stderr)
             return 2
 
-    result = lint(text, args.type)
+    result = lint(text, args.type, args.mode)
     if args.detail:
-        result["detail"] = lint_detail(text, args.type)
+        result["detail"] = lint_detail(text, args.type, args.mode)
     print(json.dumps(result, ensure_ascii=False, indent=2))
     if args.gate is not None and result["violations_total"] > args.gate:
         return 1

@@ -15,7 +15,7 @@ Mode: ikuti jenis teks sumbernya. Ini kasus terpenting, karena sebagian besar do
 > Sumber: You may want to restart the agent after changing the config.
 > Sesudah: Mulai ulang kirimlog setelah Anda mengubah `kirimlog.toml`. Perubahan konfigurasi berlaku setelah kirimlog dimulai ulang.
 
-## Pesan kesalahan dan keluaran CLI
+## Pesan kesalahan dan *output* CLI
 
 Mode: prosedur. Pembaca pesan ini sedang menghadapi kegagalan dan butuh langkah berikutnya.
 
@@ -24,9 +24,9 @@ Pola: sebut apa yang gagal. Jika penyebabnya diketahui, sebut penyebab itu. Lalu
 > Sebelum: Ups! Sepertinya terjadi masalah saat mencoba melakukan pengiriman log. Mohon pastikan kredensial Anda sudah dikonfigurasi dengan benar dan silahkan coba lagi.
 > Sesudah: OpenSearch menolak kata sandi untuk pengguna `kirimlog` (HTTP 401). Isi `password` di `kirimlog.toml` dengan nilai yang benar. Lalu, jalankan kirimlog lagi.
 
-## Runbook dan SOP
+## *Runbook* dan SOP
 
-Mode: prosedur. Runbook dibaca saat ada gangguan, sering oleh orang yang baru bangun tidur.
+Mode: prosedur. *Runbook* dibaca saat ada gangguan, sering oleh orang yang baru bangun tidur.
 
 - Satu langkah, satu kalimat perintah, syarat di depan.
 - Taruh peringatan sebelum langkah yang berisiko.
@@ -47,7 +47,7 @@ Untuk hal yang belum pasti, tulis "belum diketahui". Jangan memakai "mungkin".
 
 Mode: deskripsi. Satu butir, satu perubahan. Untuk perubahan yang merusak, tulis perintahnya dulu, lalu alasannya.
 
-> Sesudah: Perubahan yang merusak: ganti `host` dengan `source_host` di semua kueri dan dasbor Anda. Versi 3.0 mengganti nama *field* itu.
+> Sesudah: Perubahan yang merusak: ganti `host` dengan `source_host` di semua *query* dan dasbor Anda. Versi 3.0 mengganti nama *field* itu.
 
 ## Pesan *commit* dan *pull request*
 
@@ -55,12 +55,12 @@ Mode: judul berupa kalimat perintah, isi berupa deskripsi. Ikuti bahasa yang dip
 
 > Sesudah: Perbaiki percobaan ulang saat OpenSearch membalas HTTP 429
 
-## Prompt sistem dan instruksi agen AI
+## *Prompt* sistem dan instruksi agen AI
 
 Mode: prosedur. Agen tidak dapat bertanya balik, jadi setiap instruksi harus berdiri sendiri.
 
 - Satu instruksi per kalimat. Agen lebih jarang melewatkan aturan yang berdiri sendiri.
-- Satu kata untuk satu tindakan. Jika prompt memakai "cek" dan "periksa", agen dapat menganggapnya dua tindakan.
+- Satu kata untuk satu tindakan. Jika *prompt* memakai "cek" dan "periksa", agen dapat menganggapnya dua tindakan.
 - Syarat di depan: "Jika tes gagal, berhenti."
 - Pakai "harus", bukan "sebaiknya". Agen membaca "sebaiknya" sebagai pilihan.
 

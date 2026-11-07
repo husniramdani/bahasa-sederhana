@@ -11,8 +11,9 @@ PostToolUse (alat Write, Edit, atau MultiEdit):
 
 Stop:
     Membaca balasan terakhir agen dari transkrip, lalu menghitung format dan
-    basa-basi yang terlihat pembaca. Jika ada temuan, skrip mencetak
-    {"systemMessage": "..."}. Panjang balasan tidak dibatasi.
+    basa-basi yang terlihat pembaca. Hook ini juga mendaftar istilah Inggris
+    yang belum miring dan padanan Indonesia yang janggal. Jika ada temuan,
+    skrip mencetak {"systemMessage": "..."}. Panjang balasan tidak dibatasi.
 
 Pengecualian path:
     BAHASA_SEDERHANA_LINT_EXCLUDE berisi pola glob yang dipisah koma atau titik
@@ -40,6 +41,7 @@ EXCLUDED_DIRS = (".git", "node_modules", ".claude")
 # Berkas ini berisi contoh buruk yang disengaja.
 EXCLUDED_FRAGMENTS = ("skills/bahasa-sederhana/", "examples/sebelum-sesudah.md", "prompts/system-prompt.md", "output-styles/bahasa-sederhana.md")
 MAX_DETAIL_LINES = 10
+MAX_TERMS = 5
 
 PROCEDURAL_HINT = re.compile(
     r"runbook|panduan|memulai|install|instal|pemasangan|troubleshoot|pemecahan|prosedur"
@@ -207,17 +209,54 @@ def handle_stop(payload):
     if not text.strip():
         return None
 
-    counts = _linter().reader_check(text)
+    lint = _linter()
+    counts = lint.reader_check(text)
     findings = []
     for key, label in READER_LABELS:
         n = counts.get(key, 0)
         if n:
             findings.append("%d %s" % (n, label))
-    if not findings:
+
+    details = lint.lint_detail(text, "reply")
+    tegak = _distinct_terms(details, "istilah_tegak")
+    janggal = _distinct_terms(details, "padanan_janggal")
+
+    parts = []
+    if findings:
+        parts.append(", ".join(findings))
+    if tegak:
+        parts.append("kata Inggris belum miring: " + tegak)
+    if janggal:
+        parts.append("padanan janggal: " + janggal)
+    if not parts:
         return None
-    return {
-        "systemMessage": "bahasa-sederhana cek balasan: %s. Jawab dalam bentuk prosa." % ", ".join(findings)
-    }
+    parts = [parts[0]] + [p[0].upper() + p[1:] for p in parts[1:]]
+    advice = []
+    if tegak:
+        advice.append("Tulis istilah Inggris dengan huruf miring, misalnya *output*.")
+    if janggal:
+        advice.append("Pakai istilah Inggris yang lazim dengan huruf miring.")
+    if findings:
+        advice.append("Jawab dalam bentuk prosa.")
+    message = "bahasa-sederhana cek balasan: %s. %s" % (". ".join(parts), " ".join(advice))
+    return {"systemMessage": message}
+
+
+def _distinct_terms(details, category):
+    """Gabungkan paling banyak MAX_TERMS istilah berbeda dari satu kategori."""
+    terms = []
+    for d in details:
+        if d["category"] != category:
+            continue
+        term = d["text"].lower()
+        if term not in terms:
+            terms.append(term)
+    if not terms:
+        return ""
+    shown = ", ".join(terms[:MAX_TERMS])
+    if len(terms) > MAX_TERMS:
+        shown += ", dan %d lainnya" % (len(terms) - MAX_TERMS)
+    return shown
 
 
 # ---------------------------------------------------------------------------

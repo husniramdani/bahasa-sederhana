@@ -13,7 +13,7 @@ Peraturan Presiden Nomor 63 Tahun 2019 mewajibkan bahasa Indonesia yang baik dan
 | Kode | Aturan |
 |---|---|
 | BS1.1 (B) | Setiap kata harus berbentuk baku menurut KBBI. Jika ragu, periksa KBBI Daring. |
-| BS1.5 (B) | Pakai padanan resmi dari Pasti untuk istilah kelompok B di `istilah-teknis.md`. Tulis istilah asing dalam kurung dan huruf miring pada pemakaian pertama: peladen (*server*). |
+| BS1.5 (B) | Pakai padanan resmi dari Pasti untuk istilah kelompok A di `istilah-teknis.md`. Tulis istilah Inggris dalam kurung dan huruf miring pada pemakaian pertama: "peladen (*server*)". |
 | BS1.8 (B) | Tulis setiap kata asing yang belum diserap dengan huruf miring, setiap kali muncul. |
 | BS1.10 (B) | Jika padanan resmi ada di KBBI atau Pasti, pakai padanan itu, bukan kata asing. |
 | BS8.9 (B) | Bilangan yang dapat ditulis dengan satu atau dua kata ditulis dengan huruf ("tiga berkas"), kecuali dalam perincian, satuan ukur, persentase, uang, atau waktu. |

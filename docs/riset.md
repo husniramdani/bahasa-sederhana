@@ -25,7 +25,7 @@ Bahasa Indonesia tidak punya bahasa terkendali (*controlled language*) yang seta
 5. EYD V memakai koma untuk desimal dan titik untuk ribuan: 17,8 m dan Rp350,00. Waktu ditulis dengan titik: pukul 14.30.
 6. EYD V memakai tanda hubung untuk merangkai imbuhan Indonesia dengan kata asing, misalnya di-*back up*. Kata asing yang belum diserap ditulis miring.
 7. Pemakaian "di mana" dan "yang mana" sebagai penghubung adalah pengaruh kata Inggris *where* dan *which*. Kajian bahasa menggolongkannya sebagai interferensi.
-8. Banyak padanan istilah komputer sudah umum, misalnya unduh, unggah, dan tautan. Padanan lain, misalnya peladen untuk *server*, belum dikenal luas. Bahasa Sederhana membagi istilah teknis menjadi tiga kelompok (lihat `skills/bahasa-sederhana/references/istilah-teknis.md`).
+8. Banyak padanan istilah komputer sudah umum, misalnya unduh, unggah, dan tautan. Padanan lain, misalnya "peladen" untuk *server* dan "skrip" untuk *script*, jarang dipakai *developer*. Bahasa Sederhana mempertahankan istilah pemrograman dalam bahasa Inggris dan membagi istilah teknis menjadi tiga kelompok (lihat `skills/bahasa-sederhana/references/istilah-teknis.md`).
 9. Tulisan AI berbahasa Indonesia punya ciri yang dikenali pembaca: pembuka "Tentu!", frasa "di era digital saat ini", kata "menyelami", "menavigasi", "lanskap", "memanfaatkan", dan penutup "sebagai kesimpulan".
 
 ## Panjang kalimat
@@ -34,7 +34,7 @@ Kajian keterbacaan bahasa Indonesia menyebut panjang kalimat sebagai salah satu 
 
 ## Batas riset ini
 
-Belum ada data benchmark untuk Bahasa Sederhana.
+Belum ada data *benchmark* untuk Bahasa Sederhana.
 
 ## Sumber
 

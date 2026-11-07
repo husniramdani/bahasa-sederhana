@@ -1,6 +1,6 @@
 # Sebelum dan sesudah
 
-Setiap teks "Sebelum" di bawah adalah contoh gaya tulisan AI berbahasa Indonesia yang umum ditemui. Contoh ini disusun untuk repositori ini, bukan keluaran model yang direkam. Setiap teks "Sesudah" adalah isi yang sama setelah aturan Bahasa Sederhana diterapkan. Beberapa contoh "Sesudah" memakai fakta yang dianggap diberikan pengguna, misalnya jam, angka, dan penyebab. Model tidak boleh menambah fakta yang tidak ada di sumber.
+Setiap teks "Sebelum" di bawah adalah contoh gaya tulisan AI berbahasa Indonesia yang umum ditemui. Contoh ini disusun untuk *repo* ini, bukan *output* model yang direkam. Setiap teks "Sesudah" adalah isi yang sama setelah aturan Bahasa Sederhana diterapkan. Beberapa contoh "Sesudah" memakai fakta yang dianggap diberikan pengguna, misalnya jam, angka, dan penyebab. Model tidak boleh menambah fakta yang tidak ada di sumber.
 
 Semua contoh memakai kirimlog, alat baris perintah fiktif yang membaca berkas log aplikasi dan mengirimnya ke OpenSearch.
 
@@ -12,7 +12,7 @@ Sebelum: 1 kalimat 41 kata, "adalah merupakan", "yang mana", "secara mulus", "ta
 
 Sesudah: kalimat terpanjang 16 kata, satu topik per paragraf.
 
-> Alat baris perintah kirimlog membaca berkas log aplikasi dan mengirim isinya ke OpenSearch. Tim Anda dapat mencari log semua server di satu tempat.
+> Alat baris perintah kirimlog membaca berkas log aplikasi dan mengirim isinya ke OpenSearch. Tim Anda dapat mencari log semua *server* di satu tempat.
 >
 > Alat ini membaca baris baru dari setiap berkas log, mengubah setiap baris menjadi JSON, lalu mengirimnya per kelompok. Jika pengiriman gagal, kirimlog mencoba lagi.
 >
@@ -30,8 +30,8 @@ Sesudah: satu instruksi per kalimat, syarat di depan, satu kata untuk "periksa".
 >
 > Jika kirimlog tidak dapat terhubung ke OpenSearch, kirimlog berhenti dengan `connection refused`.
 >
-> 1. Pastikan OpenSearch berjalan di host tujuan.
-> 2. Pastikan host yang menjalankan kirimlog dapat terhubung ke port 9200 di host tujuan. Biasanya *firewall* memblokir port itu.
+> 1. Pastikan OpenSearch berjalan di *host* tujuan.
+> 2. Pastikan *host* yang menjalankan kirimlog dapat terhubung ke *port* 9200 di *host* tujuan. Biasanya *firewall* memblokir *port* itu.
 > 3. Jika Anda memakai OpenSearch terkelola, periksa aturan akses jaringan layanan itu.
 
 ## 3. Pesan kesalahan
@@ -64,7 +64,7 @@ Sebelum:
 
 Sesudah:
 
-> Perubahan yang merusak: ganti `host` dengan `source_host` di semua kueri dan dasbor Anda. Versi 3.0 mengganti nama *field* itu.
+> Perubahan yang merusak: ganti `host` dengan `source_host` di semua *query* dan dasbor Anda. Versi 3.0 mengganti nama *field* itu.
 
 ## 6. Terjemahan dari bahasa Inggris (lokalisasi)
 
