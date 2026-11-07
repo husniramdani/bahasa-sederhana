@@ -1,0 +1,42 @@
+[
+  {
+    "id": "cors",
+    "term": "CORS",
+    "prompt": "dasbor web buat liat status kirimlog fetch ke API kita kena error CORS di browser, padahal pake curl jalan normal. kenapa ya?"
+  },
+  {
+    "id": "n-plus-one",
+    "term": "N+1",
+    "prompt": "endpoint daftar sumber log di dasbor kirimlog lambat banget, kata temen kena N+1 query di ORM. itu maksudnya apa sih dan benerinnya gimana?"
+  },
+  {
+    "id": "jwt-expired",
+    "term": "JWT",
+    "prompt": "user dasbor kirimlog tiba2 dapet 401 \"token expired\" padahal baru login sejam. JWT expired gitu harusnya di-handle gimana?"
+  },
+  {
+    "id": "rebase-merge",
+    "term": "rebase",
+    "prompt": "git rebase sama merge bedanya apa sih? tim kirimlog lagi debat mau pake yg mana buat branch fitur"
+  },
+  {
+    "id": "docker-image",
+    "term": "multi-stage build",
+    "prompt": "image docker kirimlog gede banget, 1,8 GB. gimana cara ngecilinnya?"
+  },
+  {
+    "id": "http-429",
+    "term": "rate limit",
+    "prompt": "kirimlog dapet HTTP 429 terus dari OpenSearch pas jam sibuk. itu kenapa dan harus diapain?"
+  },
+  {
+    "id": "race-condition",
+    "term": "race condition",
+    "prompt": "dua worker pengirim kirimlog kadang ngirim batch yg sama dua kali. ini race condition ya? nyegahnya gimana?"
+  },
+  {
+    "id": "dns-ttl",
+    "term": "TTL",
+    "prompt": "aku udah ganti record DNS OpenSearch dari tadi pagi, tapi kirimlog di laptop masih konek ke IP lama. kok bisa?"
+  }
+]

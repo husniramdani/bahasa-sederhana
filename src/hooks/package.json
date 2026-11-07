@@ -1,0 +1,15 @@
+{
+  "name": "bahasa-sederhana-hooks",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Hook sesi, hook pemeriksaan berkas, dan hook pemeriksaan balasan untuk Bahasa Sederhana.",
+  "license": "MIT",
+  "type": "commonjs",
+  "main": "bahasa-sederhana-activate.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "node --test bahasa-sederhana-activate.test.js && python3 test_lint_hook.py"
+  }
+}

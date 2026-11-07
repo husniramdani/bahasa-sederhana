@@ -1,0 +1,61 @@
+{
+  "name": "bahasa-sederhana",
+  "displayName": "Bahasa Sederhana",
+  "description": "Tulis bahasa Indonesia yang sederhana, baku, dan mudah dipahami pembaca awam, dengan disiplin ASD-STE100 yang disesuaikan untuk bahasa Indonesia: kalimat pendek, satu kata satu makna, syarat sebelum perintah, ejaan EYD V dan KBBI, tanpa gaya tulisan AI.",
+  "version": "1.0.0",
+  "author": {
+    "name": "Husni Ramdani"
+  },
+  "homepage": "https://github.com/husniramdani/bahasa-sederhana",
+  "repository": "https://github.com/husniramdani/bahasa-sederhana",
+  "license": "MIT",
+  "keywords": [
+    "technical-writing",
+    "documentation",
+    "bahasa-indonesia",
+    "indonesian",
+    "eyd",
+    "kbbi",
+    "plain-language",
+    "ste",
+    "asd-ste100"
+  ],
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/src/hooks/bahasa-sederhana-activate.js\"",
+            "timeout": 5,
+            "statusMessage": "Memuat Bahasa Sederhana..."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/src/hooks/lint_hook.py\"",
+            "timeout": 10,
+            "statusMessage": "Bahasa Sederhana: memeriksa berkas..."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"${CLAUDE_PLUGIN_ROOT}/src/hooks/lint_hook.py\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

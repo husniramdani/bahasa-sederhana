@@ -1,0 +1,41 @@
+{
+  "name": "bahasa-sederhana",
+  "version": "1.0.0",
+  "description": "Tulis bahasa Indonesia yang sederhana, baku, dan mudah dipahami pembaca awam, dengan disiplin ASD-STE100 yang disesuaikan untuk bahasa Indonesia: kalimat pendek, satu kata satu makna, syarat sebelum perintah, ejaan EYD V dan KBBI, tanpa gaya tulisan AI.",
+  "author": {
+    "name": "Husni Ramdani"
+  },
+  "homepage": "https://github.com/husniramdani/bahasa-sederhana",
+  "repository": "https://github.com/husniramdani/bahasa-sederhana",
+  "license": "MIT",
+  "keywords": [
+    "technical-writing",
+    "documentation",
+    "bahasa-indonesia",
+    "indonesian",
+    "eyd",
+    "kbbi",
+    "plain-language",
+    "ste",
+    "asd-ste100"
+  ],
+  "skills": "./skills/",
+  "hooks": "./.codex-plugin/hooks.json",
+  "interface": {
+    "displayName": "Bahasa Sederhana",
+    "shortDescription": "Tulis teks teknis bahasa Indonesia yang jelas dan baku.",
+    "longDescription": "Muat aturan bahasa Indonesia sederhana secara otomatis untuk dokumentasi, prosedur, pesan kesalahan, runbook, catatan rilis, laporan insiden, dan lokalisasi.",
+    "developerName": "Husni Ramdani",
+    "category": "Productivity",
+    "capabilities": [
+      "Write"
+    ],
+    "websiteURL": "https://github.com/husniramdani/bahasa-sederhana",
+    "defaultPrompt": [
+      "Tulis ulang teks teknis ini dengan Bahasa Sederhana.",
+      "Terjemahkan dokumentasi ini ke bahasa Indonesia yang sederhana.",
+      "Periksa dokumen ini dengan aturan Bahasa Sederhana."
+    ],
+    "brandColor": "#C8102E"
+  }
+}

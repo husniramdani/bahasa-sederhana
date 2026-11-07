@@ -1,0 +1,16 @@
+{
+  "name": "bahasa-sederhana",
+  "interface": {
+    "displayName": "Bahasa Sederhana"
+  },
+  "plugins": [
+    {
+      "name": "bahasa-sederhana",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

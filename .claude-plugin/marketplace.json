@@ -1,0 +1,34 @@
+{
+  "name": "bahasa-sederhana",
+  "owner": {
+    "name": "Husni Ramdani",
+    "url": "https://github.com/husniramdani"
+  },
+  "description": "Skill bahasa Indonesia sederhana dengan disiplin ASD-STE100, EYD V, dan KBBI.",
+  "plugins": [
+    {
+      "name": "bahasa-sederhana",
+      "source": "./",
+      "displayName": "Bahasa Sederhana",
+      "description": "Tulis bahasa Indonesia yang sederhana, baku, dan mudah dipahami pembaca awam, dengan disiplin ASD-STE100 yang disesuaikan untuk bahasa Indonesia: kalimat pendek, satu kata satu makna, syarat sebelum perintah, ejaan EYD V dan KBBI, tanpa gaya tulisan AI.",
+      "version": "1.0.0",
+      "author": {
+        "name": "Husni Ramdani"
+      },
+      "homepage": "https://github.com/husniramdani/bahasa-sederhana",
+      "repository": "https://github.com/husniramdani/bahasa-sederhana",
+      "license": "MIT",
+      "keywords": [
+        "technical-writing",
+        "documentation",
+        "bahasa-indonesia",
+        "indonesian",
+        "eyd",
+        "kbbi",
+        "plain-language",
+        "ste",
+        "asd-ste100"
+      ]
+    }
+  ]
+}

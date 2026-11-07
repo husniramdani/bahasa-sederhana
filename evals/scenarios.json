@@ -1,0 +1,47 @@
+[
+  {
+    "id": "readme-intro",
+    "type": "descriptive",
+    "prompt": "tolong bikinin paragraf pembuka README buat kirimlog dong. kirimlog itu CLI yg baca file log aplikasi trus ngirim ke OpenSearch. installnya `pip install kirimlog`, config-nya di `kirimlog.toml`, jalaninnya `kirimlog kirim --config kirimlog.toml`. 1-2 paragraf aja, gak usah panjang2"
+  },
+  {
+    "id": "getting-started",
+    "type": "procedural",
+    "prompt": "bikinin bagian getting started buat docs kirimlog ya. alurnya: install pake `pip install kirimlog`, terus bikin file `kirimlog.toml` (isi alamat OpenSearch port 9200, user, password, nama index, sama path file log), abis itu jalanin `kirimlog kirim --config kirimlog.toml`. kalo mau nyoba dulu tanpa ngirim beneran ada flag `--dry-run`"
+  },
+  {
+    "id": "troubleshooting",
+    "type": "procedural",
+    "prompt": "tulisin section troubleshooting buat kirimlog dong. dua kasus yg paling sering: 1) `connection refused` pas konek ke OpenSearch port 9200, biasanya OpenSearch-nya belum jalan atau port-nya ketutup firewall. 2) HTTP 401, itu password di `kirimlog.toml` salah. kasih langkah2 benerinnya"
+  },
+  {
+    "id": "error-message",
+    "type": "procedural",
+    "prompt": "aku butuh teks pesan error buat kirimlog pas OpenSearch ngebalikin HTTP 403 waktu ngirim ke index `logs-app`. penyebabnya user kirimlog gak punya izin write ke index itu. tolong bikinin pesannya yg jelas, user harus tau mesti ngapain"
+  },
+  {
+    "id": "incident-report",
+    "type": "descriptive",
+    "prompt": "tolong tulisin laporan insiden singkat. kemarin antara jam 09.15 sampe 09.48 WIB, 7% batch log dari kirimlog gagal kekirim ke OpenSearch soalnya sertifikat TLS OpenSearch-nya expired. sertifikatnya udah diganti jam 09.44. abis itu normal lagi"
+  },
+  {
+    "id": "release-notes",
+    "type": "descriptive",
+    "prompt": "bikinin release notes kirimlog v3.0 dong. isinya: field `host` diganti nama jadi `source_host` (ini breaking change, dashboard sama query yg pake `host` harus diubah), ada flag baru `--dry-run` buat nyoba tanpa ngirim data, terus pemakaian memori turun 25%"
+  },
+  {
+    "id": "runbook-terse",
+    "type": "procedural",
+    "prompt": "tulis ulang kalimat runbook ini sesingkat mungkin ya, buat tim on-call kirimlog: \"Pastikan snapshot indeks sudah dibuat sebelum menghapus indeks lama.\""
+  },
+  {
+    "id": "architecture",
+    "type": "descriptive",
+    "prompt": "jelasin arsitektur kirimlog buat halaman docs ya. ada 3 komponen: pembaca (baca file log), pengurai (ngurai tiap baris jadi JSON), pengirim (ngirim batch ke OpenSearch pake bulk API, kalo gagal di-retry). jelasin alurnya dari file log sampe masuk OpenSearch"
+  },
+  {
+    "id": "translate-en",
+    "type": "descriptive",
+    "prompt": "terjemahin ke bahasa indonesia buat docs kirimlog ya: \"kirimlog lets you leverage a robust pipeline to seamlessly ship your application logs to OpenSearch. Before you run it, you should ensure that kirimlog.toml points to the right cluster, which is crucial to avoid authentication errors.\""
+  }
+]
