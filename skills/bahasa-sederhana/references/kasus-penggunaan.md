@@ -39,7 +39,7 @@ Mode: prosedur. *Runbook* dibaca saat ada gangguan, sering oleh orang yang baru 
 Mode: deskripsi, dengan jam, tanggal, dan zona waktu. Frasa seperti "kami telah mengidentifikasi kendala" tidak memberi tahu pembaca kapan masalah terjadi atau apa dampaknya.
 
 > Sebelum: Kami telah mengidentifikasi adanya kendala yang mungkin berdampak pada sebagian proses pengiriman log.
-> Sesudah: Antara pukul 09.15 dan 09.48 WIB, 7% kelompok log gagal terkirim. Sertifikat TLS di OpenSearch sudah kedaluwarsa.
+> Sesudah: Antara pukul 09.15 dan 09.48 WIB, 7% *batch* log gagal terkirim. Sertifikat TLS di OpenSearch sudah kedaluwarsa.
 
 Untuk hal yang belum pasti, tulis "belum diketahui". Jangan memakai "mungkin".
 

@@ -8,6 +8,8 @@ Setiap entri menyebut versi dan tanggal. Jika ada efek terukur, entri juga menye
 - Diubah: setiap kata Inggris ditulis miring setiap kali muncul, di dokumen dan di balasan obrolan.
 - Ditambahkan: dua kategori *linter*, `istilah_tegak` dan `padanan_janggal`, dengan daftar kata di `evals/istilah_inggris.tsv` dan `evals/padanan_janggal.tsv`.
 - Ditambahkan: opsi `--mode baku` pada *linter*. Opsi ini mematikan pemeriksaan `padanan_janggal`.
+- Ditambahkan: dua contoh baru di `examples/sebelum-sesudah.md`, untuk istilah pemrograman di dokumen dan di balasan obrolan.
+- Ditambahkan: *workflow* CI di `.github/workflows/check.yml` yang menjalankan tiga rangkaian tes pada setiap *push* dan *pull request*.
 
 ## 1.0.0, 7 November 2026
 

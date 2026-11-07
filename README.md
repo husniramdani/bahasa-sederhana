@@ -18,15 +18,15 @@ Teks pertama adalah gaya tulisan AI berbahasa Indonesia yang umum. Teks kedua ad
 
 Tanpa *skill*:
 
-> kirimlog adalah merupakan sebuah tool CLI yang dirancang untuk mengirimkan log-log aplikasi Anda ke OpenSearch, yang mana memungkinkan tim Anda untuk memonitor sistem secara mulus. Sebelum memulai, Anda sebaiknya memastikan index tujuan telah dibuat — hal ini sangat krusial untuk menghindari error di kemudian hari.
+> kirimlog adalah merupakan sebuah tool CLI yang dirancang untuk mengirimkan log-log aplikasi Anda ke OpenSearch, yang mana memungkinkan tim Anda untuk memonitor sistem secara mulus. Sebelum menjalankan skrip ini, Anda sebaiknya memastikan index tujuan telah dibuat dan cek keluarannya — hal ini sangat krusial untuk menghindari error di kemudian hari.
 
 Dengan *skill*:
 
 > Alat baris perintah kirimlog mengirim log aplikasi ke OpenSearch.
 >
-> Buat indeks tujuan sebelum Anda menjalankan kirimlog. Jika indeks itu belum ada, kirimlog tidak dapat mengirim data.
+> Buat indeks tujuan sebelum Anda menjalankan *script* ini. Jika indeks itu belum ada, kirimlog tidak dapat mengirim data. Periksa *output* kirimlog setelah *script* itu selesai.
 
-Contoh lain ada di [`examples/sebelum-sesudah.md`](examples/sebelum-sesudah.md). Contoh itu mencakup README, pemecahan masalah, pesan kesalahan, laporan insiden, catatan rilis, terjemahan, dan balasan obrolan.
+Contoh lain ada di [`examples/sebelum-sesudah.md`](examples/sebelum-sesudah.md). Contoh itu mencakup README, pemecahan masalah, pesan kesalahan, laporan insiden, catatan rilis, terjemahan, istilah pemrograman, dan balasan obrolan.
 
 ## Pemasangan
 

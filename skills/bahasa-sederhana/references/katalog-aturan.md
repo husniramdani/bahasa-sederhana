@@ -31,8 +31,8 @@ Sesudah: Kirim peristiwa itu ke *webhook*. Lalu, *deploy* layanan itu.
 
 Pecah frasa nomina panjang dengan kata depan (untuk, pada, dari):
 
-Sebelum: batas ukuran kelompok pengiriman log aplikasi
-Sesudah: batas ukuran kelompok untuk pengiriman log
+Sebelum: batas ukuran *batch* pengiriman log aplikasi
+Sesudah: batas ukuran *batch* untuk pengiriman log
 
 ### Bagian 3: Kata kerja
 

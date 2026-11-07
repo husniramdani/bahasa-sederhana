@@ -14,7 +14,7 @@ Sesudah: kalimat terpanjang 16 kata, satu topik per paragraf.
 
 > Alat baris perintah kirimlog membaca berkas log aplikasi dan mengirim isinya ke OpenSearch. Tim Anda dapat mencari log semua *server* di satu tempat.
 >
-> Alat ini membaca baris baru dari setiap berkas log, mengubah setiap baris menjadi JSON, lalu mengirimnya per kelompok. Jika pengiriman gagal, kirimlog mencoba lagi.
+> Alat ini membaca baris baru dari setiap berkas log, mengubah setiap baris menjadi JSON, lalu mengirimnya per *batch*. Jika pengiriman gagal, kirimlog mencoba lagi.
 >
 > Semua konfigurasi ada di satu berkas, `kirimlog.toml`.
 
@@ -54,7 +54,7 @@ Sebelum:
 
 Sesudah:
 
-> Antara pukul 09.15 dan 09.48 WIB, 7% kelompok log gagal terkirim. Sertifikat TLS di OpenSearch sudah kedaluwarsa. Kami mengganti sertifikat itu pada pukul 09.44. Sejak pukul 09.48, semua kelompok log terkirim lagi.
+> Antara pukul 09.15 dan 09.48 WIB, 7% *batch* log gagal terkirim. Sertifikat TLS di OpenSearch sudah kedaluwarsa. Kami mengganti sertifikat itu pada pukul 09.44. Sejak pukul 09.48, semua *batch* log terkirim lagi.
 
 ## 5. Perubahan yang merusak di catatan rilis
 
@@ -94,3 +94,27 @@ Sebelum:
 Sesudah:
 
 > *Browser* memblokir permintaan itu karena *server* API Anda tidak mengizinkan domain situs Anda. Aturan ini bernama CORS (aturan *browser* tentang domain yang boleh memanggil sebuah API). Tambahkan domain situs Anda ke *header* `Access-Control-Allow-Origin` di *server* API. Lalu, muat ulang halaman itu.
+
+## 8. Istilah pemrograman (aturan 11)
+
+Sebelum: istilah pemrograman diterjemahkan secara janggal, dan kata Inggris tidak dimiringkan.
+
+> Setelah skrip migrasi selesai, dorong perubahan Anda ke repositori dan buat pull request ke cabang utama. Jika sudah dideploy ke peladen produksi, periksa keluaran log dan hapus tembolok.
+
+Sesudah: istilah pemrograman tetap dalam bahasa Inggris, setiap kata Inggris miring, satu instruksi per kalimat.
+
+> 1. Setelah *script* migrasi selesai, *push* perubahan Anda ke *repo*.
+> 2. Buat *pull request* ke *branch* `main`.
+> 3. Setelah perubahan itu di-*deploy* ke *server* produksi, periksa *output* log.
+> 4. Hapus *cache* di *server* produksi.
+
+## 9. Balasan obrolan dengan istilah pemrograman
+
+Sebelum:
+
+> Bisa kok langsung push aja ke branch main, tapi sebaiknya bikin PR dulu biar di-review sama tim ya 😊
+
+Sesudah:
+
+> Buat *pull request* dulu, lalu *merge* ke *branch* `main` setelah tim selesai me-*review* perubahan itu. Dengan cara ini, tim dapat membaca perubahan Anda sebelum perubahan itu masuk ke `main`.
+
